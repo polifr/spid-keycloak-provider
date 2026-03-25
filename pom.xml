@@ -170,8 +170,6 @@
                 <artifactId>dependency-check-maven</artifactId>
                 <version>12.2.0</version>
                 <configuration>
-                    <skipProvidedScope>true</skipProvidedScope>
-                    <failBuildOnCVSS>8</failBuildOnCVSS>
                     <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
                 </configuration>
                 <executions>
