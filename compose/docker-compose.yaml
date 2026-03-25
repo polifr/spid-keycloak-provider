@@ -1,0 +1,25 @@
+services:
+  spid-keycloak:
+    image: quay.io/keycloak/keycloak:26.5.4
+    restart: always
+    container_name: "spid-keycloak"
+    command: "start-dev --import-realm"
+    ports:
+      - 8180:8180
+    environment:
+      KC_HTTP_PORT: "8180"
+      KC_HTTP_ENABLED: "true"
+      KC_HEALTH_ENABLED: "true"
+      KC_METRICS_ENABLED: "true"
+      KC_LOG_LEVEL: "info"
+      KC_BOOTSTRAP_ADMIN_USERNAME: "kc-admin"
+      KC_BOOTSTRAP_ADMIN_PASSWORD: "kc-admin"
+    volumes:
+#      - ./../../realm:/opt/keycloak/data/import
+      - ../target/spid-provider.jar:/opt/keycloak/providers/spid-provider.jar
+    networks:
+      - spid-local-network
+
+networks:
+  spid-local-network:
+    driver: bridge
