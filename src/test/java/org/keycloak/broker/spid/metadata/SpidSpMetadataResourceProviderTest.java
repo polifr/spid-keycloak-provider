@@ -17,6 +17,7 @@
 
 package org.keycloak.broker.spid.metadata;
 
+import org.jboss.logging.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,8 +49,6 @@ import org.keycloak.saml.common.util.XmlKeyInfoKeyNameTransformer;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.xmlunit.builder.DiffBuilder;
 import org.xmlunit.builder.Input;
 import org.xmlunit.diff.Diff;
@@ -89,7 +88,7 @@ import static org.mockito.ArgumentMatchers.any;
 @ExtendWith(MockitoExtension.class)
 public class SpidSpMetadataResourceProviderTest {
 
-    private static final transient Logger log = LoggerFactory.getLogger(SpidSpMetadataResourceProviderTest.class);
+    private static final transient Logger log = Logger.getLogger(SpidSpMetadataResourceProviderTest.class);
     private static final String SP_KEYCLOAK_BASE_URL = "https://keycloak.company.name.it";
     private static KeyWrapper keyWrapper;
     @Mock

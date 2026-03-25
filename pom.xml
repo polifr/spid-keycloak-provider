@@ -21,7 +21,6 @@
 
         <version.keycloak>26.5.4</version.keycloak>
         <quarkus.version>3.8.5</quarkus.version>
-        <slf4j-api.version>1.7.30</slf4j-api.version>
         <junit-jupiter.version>5.8.2</junit-jupiter.version>
         <mockito.version>4.3.1</mockito.version>
         <maven.compiler.source>21</maven.compiler.source>
@@ -79,12 +78,6 @@
         </dependency>
 
         <!-- test dependencies -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j-api.version}</version>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
