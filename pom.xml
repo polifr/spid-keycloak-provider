@@ -18,14 +18,18 @@
     <properties>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-        <version.keycloak>26.5.4</version.keycloak>
-        <quarkus.version>3.8.5</quarkus.version>
-        <junit-jupiter.version>5.8.2</junit-jupiter.version>
-        <mockito.version>4.3.1</mockito.version>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
+
+        <keycloak.version>26.5.4</keycloak.version>
+
+        <quarkus.version>3.8.5</quarkus.version>
         <resteasy.version>6.2.7.Final</resteasy.version>
+
+        <junit-jupiter.version>5.14.3</junit-jupiter.version>
+        <mockito.version>5.23.0</mockito.version>
+        <xmlunit.version>2.11.0</xmlunit.version>
+        <jersey.version>3.1.11</jersey.version>
     </properties>
 
     <scm>
@@ -37,43 +41,43 @@
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-core</artifactId>
-            <version>${version.keycloak}</version>
+            <version>${keycloak.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-saml-core</artifactId>
-            <version>${version.keycloak}</version>
+            <version>${keycloak.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-saml-adapter-api-public</artifactId>
-            <version>${version.keycloak}</version>
+            <version>${keycloak.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-server-spi</artifactId>
-            <version>${version.keycloak}</version>
+            <version>${keycloak.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-server-spi-private</artifactId>
-            <version>${version.keycloak}</version>
+            <version>${keycloak.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-services</artifactId>
-            <version>${version.keycloak}</version>
+            <version>${keycloak.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-crypto-default</artifactId>
-            <version>${version.keycloak}</version>
+            <version>${keycloak.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -93,19 +97,19 @@
         <dependency>
             <groupId>org.xmlunit</groupId>
             <artifactId>xmlunit-core</artifactId>
-            <version>2.10.0</version>
+            <version>${xmlunit.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.xmlunit</groupId>
             <artifactId>xmlunit-placeholders</artifactId>
-            <version>2.9.0</version>
+            <version>${xmlunit.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-common</artifactId>
-            <version>3.1.5</version>
+            <version>${jersey.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
