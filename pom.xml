@@ -23,9 +23,6 @@
 
         <keycloak.version>26.5.4</keycloak.version>
 
-        <quarkus.version>3.8.5</quarkus.version>
-        <resteasy.version>6.2.7.Final</resteasy.version>
-
         <junit-jupiter.version>5.14.3</junit-jupiter.version>
         <mockito.version>5.23.0</mockito.version>
         <xmlunit.version>2.11.0</xmlunit.version>
