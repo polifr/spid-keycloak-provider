@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 
 import org.jboss.logging.Logger;
 
-public class SpidGeneratedRsaKeyProviderFactory implements KeyProviderFactory {
+public class SpidGeneratedRsaKeyProviderFactory implements KeyProviderFactory<KeyProvider> {
     public static final String ID = "spid-rsa-generated";
     private static final String[] CERTIFICATE_POLICY_IDENTIFIERS = {
         "1.3.76.16",        // AgIDroot
