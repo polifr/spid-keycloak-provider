@@ -27,7 +27,7 @@ public class SpidBillingContactTypePrivateSP extends SpidBillingContactType {
 
         final Element vatFiscalCode = createElement("fpa:IdFiscaleIVA");
         if (StringUtil.isNullOrEmpty(config.getVatNumber()) || config.getVatNumber().length() < 13) {
-            logger.errorf("Invalid VAT number % ", config.getVatNumber());
+            logger.errorf("Invalid VAT number %s", config.getVatNumber());
         } else {
             createElement("fpa:IdPaese", config.getVatNumber().substring(0, 2)).ifPresent(vatFiscalCode::appendChild);
             createElement("fpa:IdCodice", config.getVatNumber().substring(2, 13)).ifPresent(vatFiscalCode::appendChild);
