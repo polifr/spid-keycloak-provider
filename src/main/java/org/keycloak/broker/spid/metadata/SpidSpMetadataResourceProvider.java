@@ -110,7 +110,7 @@ public class SpidSpMetadataResourceProvider implements RealmResourceProvider {
                 .sorted((o1,o2)-> o1.getAlias().compareTo(o2.getAlias()))
                 .collect(Collectors.toList());
 
-            if (lstSpidIdentityProviders.size() == 0)
+            if (lstSpidIdentityProviders.isEmpty())
                 throw new RuntimeException("No SPID providers found!");
 
             // Create an instance of the first SPID Identity Provider in alphabetical order
