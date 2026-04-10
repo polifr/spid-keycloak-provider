@@ -10,11 +10,11 @@ import org.keycloak.testframework.realm.ManagedRealm;
 @KeycloakIntegrationTest
 class BasicKeycloakRealmTest {
 
-	@InjectRealm
-	ManagedRealm managedRealm;
+    @InjectRealm
+    ManagedRealm managedRealm;
 
-	@Test
-	void managedRealmTest() {
-		assertNotNull(managedRealm.admin().toRepresentation());
-	}
+    @Test
+    void managedRealmTest() {
+        assertNotNull(managedRealm.admin().toRepresentation());
+    }
 }
