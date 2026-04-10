@@ -1,6 +1,6 @@
 services:
   spid-keycloak:
-    image: quay.io/keycloak/keycloak:26.5.4
+    image: quay.io/keycloak/keycloak:26.5.6
     restart: always
     container_name: "spid-keycloak"
     command: "start-dev --import-realm"
@@ -15,7 +15,7 @@ services:
       KC_BOOTSTRAP_ADMIN_USERNAME: "kc-admin"
       KC_BOOTSTRAP_ADMIN_PASSWORD: "kc-admin"
     volumes:
-#      - ./../../realm:/opt/keycloak/data/import
+      - ./realm:/opt/keycloak/data/import
       - ../target/spid-provider.jar:/opt/keycloak/providers/spid-provider.jar
     networks:
       - spid-local-network
