@@ -16,7 +16,6 @@
     <url>https://github.com/italia/spid-keycloak-provider</url>
 
     <properties>
-        <failOnMissingWebXml>false</failOnMissingWebXml>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <keycloak.version>26.5.6</keycloak.version>
