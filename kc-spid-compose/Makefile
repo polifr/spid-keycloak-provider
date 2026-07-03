@@ -4,6 +4,8 @@ SPID_KC_VERSION := $(shell sed -n 's:.*<keycloak.version>\(.*\)</keycloak.versio
 NOW := $(shell date +"%Y%m%d_%H%M%S")
 CONFIGURATION_CLIENT_IMAGE := ghcr.io/polifr/keycloak-spid-provider-configuration-client
 CONFIGURATION_CLIENT_VERSION := latest
+SPID_SP_TEST_REPOSITORY := https://github.com/polifr/spid-sp-test.git
+SPID_SP_TEST_BRANCH := test-extension
 SPID_SP_TEST_IMAGE := italia/spid-sp-test
 SPID_SP_TEST_VERSION := 0.9.0-KC
 
@@ -46,7 +48,7 @@ create-spid-sp-test-docker-image:
 	mkdir ${PWD}/tmp-docker-spid-sp-test
 	cd ${PWD}/tmp-docker-spid-sp-test
 
-	git clone -b fixes-2025 https://github.com/nicolabeghin/spid-sp-test.git
+	git clone -b $(SPID_SP_TEST_BRANCH) $(SPID_SP_TEST_REPOSITORY)
 
 	sed -i "s#<ds:X509Certificate />#<ds:X509Certificate>$$(grep -v CERTIFICATE ./spid-sp-test/src/spid_sp_test/responses/certificates/test_public.cert | tr -d '\n')</ds:X509Certificate>#" \
 		./spid-sp-test/src/spid_sp_test/responses/settings.py
