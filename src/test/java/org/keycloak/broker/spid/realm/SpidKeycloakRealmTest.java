@@ -24,14 +24,14 @@ public class SpidKeycloakRealmTest {
     @Test
     void testSpidRealm() {
         assertNotNull(spidRealm);
-        assertEquals("spid-realm", spidRealm.getName());
+        assertEquals("spid", spidRealm.getName());
     }
 
     static class SpidRealmConfig implements RealmConfig {
 
         @Override
         public RealmBuilder configure(RealmBuilder builder) {
-            return builder.name("spid-realm");
+            return builder.name("spid");
         }
     }
 }
