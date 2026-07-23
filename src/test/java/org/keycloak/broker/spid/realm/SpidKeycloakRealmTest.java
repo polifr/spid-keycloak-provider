@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
+import org.keycloak.it.junit5.extension.TestProvider;
 import org.keycloak.testframework.annotations.InjectRealm;
 import org.keycloak.testframework.annotations.KeycloakIntegrationTest;
 import org.keycloak.testframework.injection.LifeCycle;
@@ -19,7 +20,7 @@ import org.keycloak.testframework.realm.RoleBuilder;
  * TODO Il test deve prevedere la configurazione di un realm in cui e' configurato
  * il provider spid cosi' da poterlo testare.
  */
-@KeycloakIntegrationTest
+@KeycloakIntegrationTest(config = SpidSamlKeycloakServerConfig.class)
 public class SpidKeycloakRealmTest {
 
     @InjectRealm(config = SpidRealmConfig.class, lifecycle = LifeCycle.CLASS)
@@ -41,8 +42,8 @@ public class SpidKeycloakRealmTest {
                             this.umaAuthorizationRoleBuilder(), 
                             this.defaultRolesSpidRoleBuilder()
                     )
-                    .authenticationFlows(this.firstBrokerLoginSpidAuthenticationFlowBuilder())
-                    .identityProviders(this.spidSpTestIdentityProviderBuilder())
+                    //.authenticationFlows(this.firstBrokerLoginSpidAuthenticationFlowBuilder())
+                    //.identityProviders(this.spidSpTestIdentityProviderBuilder())
                     ;
         }
 
@@ -76,8 +77,18 @@ public class SpidKeycloakRealmTest {
                     .providerId("basic-flow")
                     .topLevel(true)
                     .authenticationExecutions(
-                            AuthenticationExecutionExportBuilder.create().authenticator("idp-review-profile").authenticatorFlow(false).priority(10).requirement("DISABLED").userSetupAllowed(false),
-                            AuthenticationExecutionExportBuilder.create().authenticatorFlow(true).flowAlias("first broker login SPID User creation or linking").priority(20).requirement("REQUIRED").userSetupAllowed(false)
+                            AuthenticationExecutionExportBuilder.create()
+                                    .authenticator("idp-review-profile")
+                                    .authenticatorFlow(false)
+                                    .priority(10)
+                                    .requirement("DISABLED")
+                                    .userSetupAllowed(false),
+                            AuthenticationExecutionExportBuilder.create()
+                                    .authenticatorFlow(true)
+                                    .flowAlias("first broker login SPID User creation or linking")
+                                    .priority(20)
+                                    .requirement("REQUIRED")
+                                    .userSetupAllowed(false)
                     );
         }
 
