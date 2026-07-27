@@ -1,4 +1,4 @@
-package org.keycloak.broker.spid.realm;
+package org.keycloak.broker.spid.configuration;
 
 import org.keycloak.testframework.server.DefaultKeycloakServerConfig;
 import org.keycloak.testframework.server.KeycloakServerConfigBuilder;

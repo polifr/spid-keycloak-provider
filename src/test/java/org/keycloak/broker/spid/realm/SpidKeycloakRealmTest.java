@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
-import org.keycloak.it.junit5.extension.TestProvider;
+import org.keycloak.broker.spid.configuration.SpidSamlKeycloakServerConfig;
 import org.keycloak.testframework.annotations.InjectRealm;
 import org.keycloak.testframework.annotations.KeycloakIntegrationTest;
 import org.keycloak.testframework.injection.LifeCycle;
@@ -43,7 +43,7 @@ public class SpidKeycloakRealmTest {
                             this.defaultRolesSpidRoleBuilder()
                     )
                     //.authenticationFlows(this.firstBrokerLoginSpidAuthenticationFlowBuilder())
-                    //.identityProviders(this.spidSpTestIdentityProviderBuilder())
+                    .identityProviders(this.spidSpTestIdentityProviderBuilder())
                     ;
         }
 
