@@ -13,9 +13,21 @@ import org.keycloak.broker.spid.configuration.SpidSamlKeycloakServerConfig;
 import org.keycloak.testframework.annotations.InjectAdminClient;
 import org.keycloak.testframework.annotations.KeycloakIntegrationTest;
 
+/**
+ * Il test verifica che il provider "spid-saml" e' stato correttamente
+ * letto ed e' configurabile tramite l'admin client di Keycloak. Prevede
+ * l'uso della classe di configurazione {@link SpidSamlKeycloakServerConfig}
+ * per indicare che nelle dipendenze del server c'e' anche il progetto
+ * corrente.
+ * 
+ * @see SpidSamlKeycloakServerConfig
+ */
 @KeycloakIntegrationTest(config = SpidSamlKeycloakServerConfig.class)
 public class SpidKeycloakProviderTest {
 
+    /**
+     * Riferimento all'admin client per la gestione del server Keycloak di test
+     */
     @InjectAdminClient
     Keycloak adminClient;
 
@@ -24,8 +36,13 @@ public class SpidKeycloakProviderTest {
         assertNotNull(adminClient, "adminClient not injected");
     }
 
+    /**
+     * Verifica che tra gli identity providers disponibili nell'istanza di Keycloak
+     * sia presente anche lo "spid-saml", associato alla
+     * {@link SpidIdentityProviderFactory}.
+     */
     @Test
-    final void spidIdentityProviderShouldBeRegistered() throws Exception {
+    final void spidIdentityProviderShouldBeRegistered() {
         List<Map<String, String>> idps = adminClient.serverInfo().getInfo().getIdentityProviders();
         List<String> providers = idps.stream()
                 .map(m -> m.get("id"))
