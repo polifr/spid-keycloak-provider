@@ -3,6 +3,9 @@ package org.keycloak.broker.spid.configuration;
 import static org.keycloak.testframework.realm.AuthenticationExecutionExportBuilder.alias;
 import static org.keycloak.testframework.realm.AuthenticationExecutionExportBuilder.authenticator;
 
+import java.util.Map;
+
+import org.keycloak.representations.idm.IdentityProviderMapperRepresentation;
 import org.keycloak.testframework.realm.AuthenticationFlowBuilder;
 import org.keycloak.testframework.realm.IdentityProviderBuilder;
 import org.keycloak.testframework.realm.RealmBuilder;
@@ -15,28 +18,29 @@ public class SpidRealmConfig implements RealmConfig {
     public RealmBuilder configure(RealmBuilder builder) {
         return builder.name("spid")
                 .realmRoles(
-                        this.offlineAccessRoleBuilder(), 
-                        this.umaAuthorizationRoleBuilder(), 
-                        this.defaultRolesSpidRoleBuilder()
+                        this.offlineAccessRole(), 
+                        this.umaAuthorizationRole(), 
+                        this.defaultRolesSpidRole()
                 )
-                .authenticationFlows(this.authenticationFlowsBuilder())
-                .identityProviders(this.spidSpTestIdentityProviderBuilder())
+                .authenticationFlows(this.authenticationFlows())
+                .identityProviders(this.spidSpTestIdentityProvider())
+                .identityProviderMappers(this.identityProviderMappers())
                 ;
     }
 
-    private RoleBuilder offlineAccessRoleBuilder() {
+    private RoleBuilder offlineAccessRole() {
         return RoleBuilder.create("offline_access")
                 .description("${role_offline-access}")
                 .composite(false);
     }
 
-    private RoleBuilder umaAuthorizationRoleBuilder() {
+    private RoleBuilder umaAuthorizationRole() {
         return RoleBuilder.create("uma_authorization")
                 .description("${role_uma_authorization}")
                 .composite(false);
     }
 
-    private RoleBuilder defaultRolesSpidRoleBuilder() {
+    private RoleBuilder defaultRolesSpidRole() {
         return RoleBuilder.create("default-roles-spid")
                 .composite(true)
                 .description("${role_default-roles}")
@@ -44,7 +48,7 @@ public class SpidRealmConfig implements RealmConfig {
                 .clientComposite("account", "view-profile", "manage-account");
     }
 
-    private AuthenticationFlowBuilder[] authenticationFlowsBuilder() {
+    private AuthenticationFlowBuilder[] authenticationFlows() {
         return new AuthenticationFlowBuilder[] {
                 AuthenticationFlowBuilder.create()
                         .alias("first broker login SPID")
@@ -110,12 +114,59 @@ public class SpidRealmConfig implements RealmConfig {
                 };
     }
 
-    private IdentityProviderBuilder spidSpTestIdentityProviderBuilder() {
+    private IdentityProviderBuilder spidSpTestIdentityProvider() {
         return IdentityProviderBuilder.create()
                 .alias("spid-spid-sp-test")
                 .displayName("SPID spid-sp-test")
                 .storeToken(false)
                 .addReadTokenRoleOnCreate(false)
                 .providerId("spid-saml");
+    }
+
+    private IdentityProviderMapperRepresentation[] identityProviderMappers() {
+        return new IdentityProviderMapperRepresentation[] {
+                this.buildIdentityProviderRepresentation("Username", "spid-spid-sp-test", "spid-saml-username-idp-mapper", 
+                        Map.of("syncMode", "INHERIT", "template", "${ATTRIBUTE.fiscalNumber}", "target", "BROKER_USERNAME")),
+                this.buildIdentityProviderRepresentation("First Name", "spid-spid-sp-test", "spid-user-attribute-idp-mapper", 
+                        Map.of("syncMode", "INHERIT", "user.attribute", "firstName", "attribute.name", "name")),
+                this.buildIdentityProviderRepresentation("Last Name", "spid-spid-sp-test", "spid-user-attribute-idp-mapper", 
+                        Map.of("syncMode", "INHERIT", "user.attribute", "lastName", "attribute", "familyName", "attribute.name", "familyName")),
+                this.buildIdentityProviderRepresentation("SPID Code", "spid-spid-sp-test", "spid-user-attribute-idp-mapper", 
+                        Map.of("syncMode", "INHERIT", "user.attribute", "spid-spidCode", "attribute", "spidCode", "attribute.name", "spidCode")),
+                this.buildIdentityProviderRepresentation("Email", "spid-spid-sp-test", "spid-user-attribute-idp-mapper", 
+                        Map.of("syncMode", "INHERIT", "user.attribute", "spid-email", "attribute", "email", "attribute.name", "email")),
+                this.buildIdentityProviderRepresentation("Tax Id", "spid-spid-sp-test", "spid-user-attribute-idp-mapper", // Verificare se Tax Id o Fiscal Number 
+                        Map.of("syncMode", "INHERIT", "user.attribute", "spid-fiscalNumber", "attribute", "fiscalNumber", "attribute.name", "fiscalNumber")),
+                this.buildIdentityProviderRepresentation("Gender", "spid-spid-sp-test", "spid-user-attribute-idp-mapper", 
+                        Map.of("syncMode", "INHERIT", "user.attribute", "spid-gender", "attribute", "gender", "attribute.name", "gender")),
+                this.buildIdentityProviderRepresentation("Date Of Birth", "spid-spid-sp-test", "spid-user-attribute-idp-mapper", 
+                        Map.of("syncMode", "INHERIT", "user.attribute", "spid-dateOfBirth", "attribute", "dateOfBirth", "attribute.name", "dateOfBirth")),
+                this.buildIdentityProviderRepresentation("Place Of Birth", "spid-spid-sp-test", "spid-user-attribute-idp-mapper", 
+                        Map.of("syncMode", "INHERIT", "user.attribute", "spid-placeOfBirth", "attribute", "placeOfBirth", "attribute.name", "placeOfBirth")),
+                this.buildIdentityProviderRepresentation("County Of Birth", "spid-spid-sp-test", "spid-user-attribute-idp-mapper", 
+                        Map.of("syncMode", "INHERIT", "user.attribute", "spid-countyOfBirth", "attribute", "countyOfBirth", "attribute.name", "countyOfBirth")),
+                this.buildIdentityProviderRepresentation("Mobile Phone", "spid-spid-sp-test", "spid-user-attribute-idp-mapper", 
+                        Map.of("syncMode", "INHERIT", "user.attribute", "spid-mobilePhone", "attribute", "mobilePhone", "attribute.name", "mobilePhone")),
+                this.buildIdentityProviderRepresentation("Address", "spid-spid-sp-test", "spid-user-attribute-idp-mapper", 
+                        Map.of("syncMode", "INHERIT", "user.attribute", "spid-address", "attribute", "address", "attribute.name", "address")),
+                this.buildIdentityProviderRepresentation("Digital Address", "spid-spid-sp-test", "spid-user-attribute-idp-mapper", 
+                        Map.of("syncMode", "INHERIT", "user.attribute", "spid-digitalAddress", "attribute", "digitalAddress", "attribute.name", "digitalAddress")),
+                this.buildIdentityProviderRepresentation("Company Name", "spid-spid-sp-test", "spid-user-attribute-idp-mapper", 
+                        Map.of("syncMode", "INHERIT", "user.attribute", "spid-companyName", "attribute", "companyName", "attribute.name", "companyName")),
+                this.buildIdentityProviderRepresentation("Company Address", "spid-spid-sp-test", "spid-user-attribute-idp-mapper", 
+                        Map.of("syncMode", "INHERIT", "user.attribute", "spid-registeredOffice", "attribute", "registeredOffice", "attribute.name", "registeredOffice")),
+                this.buildIdentityProviderRepresentation("VAT Number", "spid-spid-sp-test", "spid-user-attribute-idp-mapper", 
+                        Map.of("syncMode", "INHERIT", "user.attribute", "spid-ivaCode", "attribute", "ivaCode", "attribute.name", "ivaCode")),
+        };
+    }
+    
+    private IdentityProviderMapperRepresentation buildIdentityProviderRepresentation(
+            String name, String identityProviderAlias, String identityProviderMapper, Map<String, String> config) {
+        IdentityProviderMapperRepresentation rep = new IdentityProviderMapperRepresentation();
+        rep.setName(name);
+        rep.setIdentityProviderAlias(identityProviderAlias);
+        rep.setIdentityProviderMapper(identityProviderMapper);
+        rep.setConfig(config);
+        return rep;
     }
 }
