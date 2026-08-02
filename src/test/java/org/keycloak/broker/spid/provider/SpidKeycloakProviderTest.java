@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 import java.util.Map;
 
+import org.jboss.logging.Logger;
 import org.junit.jupiter.api.Test;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.broker.spid.SpidIdentityProviderFactory;
@@ -24,6 +25,8 @@ import org.keycloak.testframework.annotations.KeycloakIntegrationTest;
  */
 @KeycloakIntegrationTest(config = SpidSamlKeycloakServerConfig.class)
 public class SpidKeycloakProviderTest {
+
+    private static final Logger logger = Logger.getLogger(SpidKeycloakProviderTest.class);
 
     /**
      * Riferimento all'admin client per la gestione del server Keycloak di test
@@ -49,6 +52,7 @@ public class SpidKeycloakProviderTest {
                 .sorted()
                 .toList();
 
+        logger.info("Providers: " + providers.toString());
         assertTrue(
             providers.contains(SpidIdentityProviderFactory.PROVIDER_ID),
             () -> "Registered providers: " + providers

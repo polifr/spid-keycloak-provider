@@ -3,16 +3,25 @@ package org.keycloak.broker.spid.configuration;
 import static org.keycloak.testframework.realm.AuthenticationExecutionExportBuilder.alias;
 import static org.keycloak.testframework.realm.AuthenticationExecutionExportBuilder.authenticator;
 
-import java.util.Map;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 
+import org.jboss.logging.Logger;
 import org.keycloak.representations.idm.IdentityProviderMapperRepresentation;
+import org.keycloak.representations.idm.IdentityProviderRepresentation;
 import org.keycloak.testframework.realm.AuthenticationFlowBuilder;
-import org.keycloak.testframework.realm.IdentityProviderBuilder;
 import org.keycloak.testframework.realm.RealmBuilder;
 import org.keycloak.testframework.realm.RealmConfig;
 import org.keycloak.testframework.realm.RoleBuilder;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+
 public class SpidRealmConfig implements RealmConfig {
+
+    private static final Logger logger = Logger.getLogger(SpidRealmConfig.class);
+    private static final ObjectMapper MAPPER = JsonMapper.builder().findAndAddModules().build();
 
     @Override
     public RealmBuilder configure(RealmBuilder builder) {
@@ -23,7 +32,8 @@ public class SpidRealmConfig implements RealmConfig {
                         this.defaultRolesSpidRole()
                 )
                 .authenticationFlows(this.authenticationFlows())
-                .identityProviders(this.spidSpTestIdentityProvider())
+                .identityProviders(this.identityProviders())
+//                .identityProviders(this.spidSpTestIdentityProvider())
                 .identityProviderMappers(this.identityProviderMappers())
                 ;
     }
@@ -114,59 +124,32 @@ public class SpidRealmConfig implements RealmConfig {
                 };
     }
 
-    private IdentityProviderBuilder spidSpTestIdentityProvider() {
-        return IdentityProviderBuilder.create()
-                .alias("spid-spid-sp-test")
-                .displayName("SPID spid-sp-test")
-                .storeToken(false)
-                .addReadTokenRoleOnCreate(false)
-                .providerId("spid-saml");
+    private IdentityProviderRepresentation[] identityProviders() {
+        try {
+            return readArray("identity-providers.json", IdentityProviderRepresentation.class);
+        } catch (IOException ex) {
+            logger.error("IOException reading identity providers json file", ex);
+            return new IdentityProviderRepresentation[] {};
+        }
     }
 
     private IdentityProviderMapperRepresentation[] identityProviderMappers() {
-        return new IdentityProviderMapperRepresentation[] {
-                this.buildIdentityProviderRepresentation("Username", "spid-spid-sp-test", "spid-saml-username-idp-mapper", 
-                        Map.of("syncMode", "INHERIT", "template", "${ATTRIBUTE.fiscalNumber}", "target", "BROKER_USERNAME")),
-                this.buildIdentityProviderRepresentation("First Name", "spid-spid-sp-test", "spid-user-attribute-idp-mapper", 
-                        Map.of("syncMode", "INHERIT", "user.attribute", "firstName", "attribute.name", "name")),
-                this.buildIdentityProviderRepresentation("Last Name", "spid-spid-sp-test", "spid-user-attribute-idp-mapper", 
-                        Map.of("syncMode", "INHERIT", "user.attribute", "lastName", "attribute", "familyName", "attribute.name", "familyName")),
-                this.buildIdentityProviderRepresentation("SPID Code", "spid-spid-sp-test", "spid-user-attribute-idp-mapper", 
-                        Map.of("syncMode", "INHERIT", "user.attribute", "spid-spidCode", "attribute", "spidCode", "attribute.name", "spidCode")),
-                this.buildIdentityProviderRepresentation("Email", "spid-spid-sp-test", "spid-user-attribute-idp-mapper", 
-                        Map.of("syncMode", "INHERIT", "user.attribute", "spid-email", "attribute", "email", "attribute.name", "email")),
-                this.buildIdentityProviderRepresentation("Tax Id", "spid-spid-sp-test", "spid-user-attribute-idp-mapper", // Verificare se Tax Id o Fiscal Number 
-                        Map.of("syncMode", "INHERIT", "user.attribute", "spid-fiscalNumber", "attribute", "fiscalNumber", "attribute.name", "fiscalNumber")),
-                this.buildIdentityProviderRepresentation("Gender", "spid-spid-sp-test", "spid-user-attribute-idp-mapper", 
-                        Map.of("syncMode", "INHERIT", "user.attribute", "spid-gender", "attribute", "gender", "attribute.name", "gender")),
-                this.buildIdentityProviderRepresentation("Date Of Birth", "spid-spid-sp-test", "spid-user-attribute-idp-mapper", 
-                        Map.of("syncMode", "INHERIT", "user.attribute", "spid-dateOfBirth", "attribute", "dateOfBirth", "attribute.name", "dateOfBirth")),
-                this.buildIdentityProviderRepresentation("Place Of Birth", "spid-spid-sp-test", "spid-user-attribute-idp-mapper", 
-                        Map.of("syncMode", "INHERIT", "user.attribute", "spid-placeOfBirth", "attribute", "placeOfBirth", "attribute.name", "placeOfBirth")),
-                this.buildIdentityProviderRepresentation("County Of Birth", "spid-spid-sp-test", "spid-user-attribute-idp-mapper", 
-                        Map.of("syncMode", "INHERIT", "user.attribute", "spid-countyOfBirth", "attribute", "countyOfBirth", "attribute.name", "countyOfBirth")),
-                this.buildIdentityProviderRepresentation("Mobile Phone", "spid-spid-sp-test", "spid-user-attribute-idp-mapper", 
-                        Map.of("syncMode", "INHERIT", "user.attribute", "spid-mobilePhone", "attribute", "mobilePhone", "attribute.name", "mobilePhone")),
-                this.buildIdentityProviderRepresentation("Address", "spid-spid-sp-test", "spid-user-attribute-idp-mapper", 
-                        Map.of("syncMode", "INHERIT", "user.attribute", "spid-address", "attribute", "address", "attribute.name", "address")),
-                this.buildIdentityProviderRepresentation("Digital Address", "spid-spid-sp-test", "spid-user-attribute-idp-mapper", 
-                        Map.of("syncMode", "INHERIT", "user.attribute", "spid-digitalAddress", "attribute", "digitalAddress", "attribute.name", "digitalAddress")),
-                this.buildIdentityProviderRepresentation("Company Name", "spid-spid-sp-test", "spid-user-attribute-idp-mapper", 
-                        Map.of("syncMode", "INHERIT", "user.attribute", "spid-companyName", "attribute", "companyName", "attribute.name", "companyName")),
-                this.buildIdentityProviderRepresentation("Company Address", "spid-spid-sp-test", "spid-user-attribute-idp-mapper", 
-                        Map.of("syncMode", "INHERIT", "user.attribute", "spid-registeredOffice", "attribute", "registeredOffice", "attribute.name", "registeredOffice")),
-                this.buildIdentityProviderRepresentation("VAT Number", "spid-spid-sp-test", "spid-user-attribute-idp-mapper", 
-                        Map.of("syncMode", "INHERIT", "user.attribute", "spid-ivaCode", "attribute", "ivaCode", "attribute.name", "ivaCode")),
-        };
+        try {
+            return readArray("identity-provider-mappers.json", IdentityProviderMapperRepresentation.class);
+        } catch (IOException ex) {
+            logger.error("IOException reading identity provider mapperss json file", ex);
+            return new IdentityProviderMapperRepresentation[] {};
+        }
     }
     
-    private IdentityProviderMapperRepresentation buildIdentityProviderRepresentation(
-            String name, String identityProviderAlias, String identityProviderMapper, Map<String, String> config) {
-        IdentityProviderMapperRepresentation rep = new IdentityProviderMapperRepresentation();
-        rep.setName(name);
-        rep.setIdentityProviderAlias(identityProviderAlias);
-        rep.setIdentityProviderMapper(identityProviderMapper);
-        rep.setConfig(config);
-        return rep;
+    private static <T> T[] readArray(String jsonFileName, Class<T> elementType) throws IOException {
+        try (InputStream is = SpidRealmConfig.class.getResourceAsStream(jsonFileName)) {
+            if (is == null) {
+                throw new FileNotFoundException("Resource not found: " + SpidRealmConfig.class.getPackageName() + "/" + jsonFileName);
+            }
+            T[] array = MAPPER.readValue(is, MAPPER.getTypeFactory().constructArrayType(elementType));
+            logger.info("Objects read from json: " + array.length);
+            return array;
+        }
     }
 }

@@ -1,0 +1,143 @@
+[
+  {
+    "name": "Place Of Birth",
+    "identityProviderAlias": "spid-spid-sp-test",
+    "identityProviderMapper": "spid-user-attribute-idp-mapper",
+    "config": {
+      "syncMode": "INHERIT",
+      "user.attribute": "spid-placeOfBirth",
+      "attribute": "placeOfBirth",
+      "attribute.name": "placeOfBirth"
+    }
+  },
+  {
+    "name": "Digital Address",
+    "identityProviderAlias": "spid-spid-sp-test",
+    "identityProviderMapper": "spid-user-attribute-idp-mapper",
+    "config": {
+      "syncMode": "INHERIT",
+      "user.attribute": "spid-digitalAddress",
+      "attribute": "digitalAddress",
+      "attribute.name": "digitalAddress"
+    }
+  },
+  {
+    "name": "Address",
+    "identityProviderAlias": "spid-spid-sp-test",
+    "identityProviderMapper": "spid-user-attribute-idp-mapper",
+    "config": {
+      "syncMode": "INHERIT",
+      "user.attribute": "spid-address",
+      "attribute": "address",
+      "attribute.name": "address"
+    }
+  },
+  {
+    "name": "Fiscal Number",
+    "identityProviderAlias": "spid-spid-sp-test",
+    "identityProviderMapper": "spid-user-attribute-idp-mapper",
+    "config": {
+      "syncMode": "INHERIT",
+      "user.attribute": "spid-fiscalNumber",
+      "attribute": "fiscalNumber",
+      "attribute.name": "fiscalNumber"
+    }
+  },
+  {
+    "name": "Mobile Phone",
+    "identityProviderAlias": "spid-spid-sp-test",
+    "identityProviderMapper": "spid-user-attribute-idp-mapper",
+    "config": {
+      "syncMode": "INHERIT",
+      "user.attribute": "spid-mobilePhone",
+      "attribute": "mobilePhone",
+      "attribute.name": "mobilePhone"
+    }
+  },
+  {
+    "name": "SPID Code",
+    "identityProviderAlias": "spid-spid-sp-test",
+    "identityProviderMapper": "spid-user-attribute-idp-mapper",
+    "config": {
+      "syncMode": "INHERIT",
+      "user.attribute": "spid-spidCode",
+      "attribute": "spidCode",
+      "attribute.name": "spidCode"
+    }
+  },
+  {
+    "name": "Date Of Birth",
+    "identityProviderAlias": "spid-spid-sp-test",
+    "identityProviderMapper": "spid-user-attribute-idp-mapper",
+    "config": {
+      "syncMode": "INHERIT",
+      "user.attribute": "spid-dateOfBirth",
+      "attribute": "dateOfBirth",
+      "attribute.name": "dateOfBirth"
+    }
+  },
+  {
+    "name": "Email",
+    "identityProviderAlias": "spid-spid-sp-test",
+    "identityProviderMapper": "spid-user-attribute-idp-mapper",
+    "config": {
+      "syncMode": "INHERIT",
+      "user.attribute": "spid-email",
+      "attribute": "email",
+      "attribute.name": "email"
+    }
+  },
+  {
+    "name": "County Of Birth",
+    "identityProviderAlias": "spid-spid-sp-test",
+    "identityProviderMapper": "spid-user-attribute-idp-mapper",
+    "config": {
+      "syncMode": "INHERIT",
+      "user.attribute": "spid-countyOfBirth",
+      "attribute": "countyOfBirth",
+      "attribute.name": "countyOfBirth"
+    }
+  },
+  {
+    "name": "First Name",
+    "identityProviderAlias": "spid-spid-sp-test",
+    "identityProviderMapper": "spid-user-attribute-idp-mapper",
+    "config": {
+      "syncMode": "INHERIT",
+      "user.attribute": "firstName",
+      "attribute.name": "name"
+    }
+  },
+  {
+    "name": "Last Name",
+    "identityProviderAlias": "spid-spid-sp-test",
+    "identityProviderMapper": "spid-user-attribute-idp-mapper",
+    "config": {
+      "syncMode": "INHERIT",
+      "user.attribute": "lastName",
+      "attribute": "familyName",
+      "attribute.name": "familyName"
+    }
+  },
+  {
+    "name": "Gender",
+    "identityProviderAlias": "spid-spid-sp-test",
+    "identityProviderMapper": "spid-user-attribute-idp-mapper",
+    "config": {
+      "syncMode": "INHERIT",
+      "user.attribute": "spid-gender",
+      "attribute": "gender",
+      "attribute.name": "gender"
+    }
+  },
+  {
+    "name": "Username",
+    "identityProviderAlias": "spid-spid-sp-test",
+    "identityProviderMapper": "spid-saml-username-idp-mapper",
+    "config": {
+      "template": "${ATTRIBUTE.fiscalNumber}",
+      "syncMode": "INHERIT",
+      "target": "BROKER_USERNAME"
+    }
+  }
+]
