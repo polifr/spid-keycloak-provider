@@ -135,6 +135,11 @@
             <version>${jersey.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc17</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
