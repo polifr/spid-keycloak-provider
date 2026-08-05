@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
+
 import java.util.List;
 
 import org.jboss.logging.Logger;
@@ -48,7 +50,7 @@ public class SpidKeycloakRealmTest {
 
     @BeforeAll
     static void setup() {
-        wireMock = new WireMockServer(80);
+        wireMock = new WireMockServer(options().port(80).usingFilesUnderClasspath("wiremock"));
         wireMock.start();
 
         WireMock.configureFor("localhost", wireMock.port());
