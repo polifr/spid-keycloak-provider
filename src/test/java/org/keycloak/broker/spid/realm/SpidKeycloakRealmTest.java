@@ -8,6 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 
 import org.jboss.logging.Logger;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.keycloak.broker.spid.configuration.SpidRealmConfig;
 import org.keycloak.broker.spid.configuration.SpidSamlKeycloakServerConfig;
@@ -17,6 +19,9 @@ import org.keycloak.testframework.annotations.InjectRealm;
 import org.keycloak.testframework.annotations.KeycloakIntegrationTest;
 import org.keycloak.testframework.injection.LifeCycle;
 import org.keycloak.testframework.realm.ManagedRealm;
+
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.WireMock;
 
 /**
  * Il test deve prevedere la configurazione di un realm in cui e' configurato il
@@ -38,6 +43,27 @@ public class SpidKeycloakRealmTest {
      */
     @InjectRealm(config = SpidRealmConfig.class, lifecycle = LifeCycle.CLASS)
     ManagedRealm spidRealm;
+
+    private static WireMockServer wireMock;
+
+    @BeforeAll
+    static void setup() {
+        wireMock = new WireMockServer(80);
+        wireMock.start();
+
+        WireMock.configureFor("localhost", wireMock.port());
+
+        wireMock.stubFor(WireMock.get(WireMock.urlEqualTo("/spid-sp-test.xml"))
+            .willReturn(WireMock.aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/xml")
+                .withBodyFile("spid-sp-test.xml")));
+    }
+
+    @AfterAll
+    static void shutdown() {
+        wireMock.shutdown();
+    }
 
     /**
      * Verifica che il realm e' stato iniettato
