@@ -139,5 +139,146 @@
       "syncMode": "INHERIT",
       "target": "BROKER_USERNAME"
     }
+  },
+  {
+    "name": "First Name",
+    "identityProviderAlias": "spid-demo",
+    "identityProviderMapper": "spid-user-attribute-idp-mapper",
+    "config": {
+      "syncMode": "INHERIT",
+      "user.attribute": "firstName",
+      "attribute.name": "name"
+    }
+  },
+  {
+    "name": "Mobile Phone",
+    "identityProviderAlias": "spid-demo",
+    "identityProviderMapper": "spid-user-attribute-idp-mapper",
+    "config": {
+      "syncMode": "INHERIT",
+      "user.attribute": "spid-mobilePhone",
+      "attribute": "mobilePhone",
+      "attribute.name": "mobilePhone"
+    }
+  },
+  {
+    "name": "SPID Code",
+    "identityProviderAlias": "spid-demo",
+    "identityProviderMapper": "spid-user-attribute-idp-mapper",
+    "config": {
+      "syncMode": "INHERIT",
+      "user.attribute": "spid-spidCode",
+      "attribute": "spidCode",
+      "attribute.name": "spidCode"
+    }
+  },
+  {
+    "name": "Digital Address",
+    "identityProviderAlias": "spid-demo",
+    "identityProviderMapper": "spid-user-attribute-idp-mapper",
+    "config": {
+      "syncMode": "INHERIT",
+      "user.attribute": "spid-digitalAddress",
+      "attribute": "digitalAddress",
+      "attribute.name": "digitalAddress"
+    }
+  },
+  {
+    "name": "Gender",
+    "identityProviderAlias": "spid-demo",
+    "identityProviderMapper": "spid-user-attribute-idp-mapper",
+    "config": {
+      "syncMode": "INHERIT",
+      "user.attribute": "spid-gender",
+      "attribute": "gender",
+      "attribute.name": "gender"
+    }
+  },
+  {
+    "name": "Fiscal Number",
+    "identityProviderAlias": "spid-demo",
+    "identityProviderMapper": "spid-user-attribute-idp-mapper",
+    "config": {
+      "syncMode": "INHERIT",
+      "user.attribute": "spid-fiscalNumber",
+      "attribute": "fiscalNumber",
+      "attribute.name": "fiscalNumber"
+    }
+  },
+  {
+    "name": "Last Name",
+    "identityProviderAlias": "spid-demo",
+    "identityProviderMapper": "spid-user-attribute-idp-mapper",
+    "config": {
+      "syncMode": "INHERIT",
+      "user.attribute": "lastName",
+      "attribute": "familyName",
+      "attribute.name": "familyName"
+    }
+  },
+  {
+    "name": "Username",
+    "identityProviderAlias": "spid-demo",
+    "identityProviderMapper": "spid-saml-username-idp-mapper",
+    "config": {
+      "template": "${ATTRIBUTE.fiscalNumber}",
+      "syncMode": "INHERIT",
+      "target": "BROKER_USERNAME"
+    }
+  },
+  {
+    "name": "Date Of Birth",
+    "identityProviderAlias": "spid-demo",
+    "identityProviderMapper": "spid-user-attribute-idp-mapper",
+    "config": {
+      "syncMode": "INHERIT",
+      "user.attribute": "spid-dateOfBirth",
+      "attribute": "dateOfBirth",
+      "attribute.name": "dateOfBirth"
+    }
+  },
+  {
+    "name": "Email",
+    "identityProviderAlias": "spid-demo",
+    "identityProviderMapper": "spid-user-attribute-idp-mapper",
+    "config": {
+      "syncMode": "INHERIT",
+      "user.attribute": "spid-email",
+      "attribute": "email",
+      "attribute.name": "email"
+    }
+  },
+  {
+    "name": "Place Of Birth",
+    "identityProviderAlias": "spid-demo",
+    "identityProviderMapper": "spid-user-attribute-idp-mapper",
+    "config": {
+      "syncMode": "INHERIT",
+      "user.attribute": "spid-placeOfBirth",
+      "attribute": "placeOfBirth",
+      "attribute.name": "placeOfBirth"
+    }
+  },
+  {
+    "name": "County Of Birth",
+    "identityProviderAlias": "spid-demo",
+    "identityProviderMapper": "spid-user-attribute-idp-mapper",
+    "config": {
+      "syncMode": "INHERIT",
+      "user.attribute": "spid-countyOfBirth",
+      "attribute": "countyOfBirth",
+      "attribute.name": "countyOfBirth"
+    }
+  },
+  {
+    "name": "Address",
+    "identityProviderAlias": "spid-demo",
+    "identityProviderMapper": "spid-user-attribute-idp-mapper",
+    "config": {
+      "syncMode": "INHERIT",
+      "user.attribute": "spid-address",
+      "attribute": "address",
+      "attribute.name": "address"
+    }
   }
 ]

@@ -12,6 +12,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
+import java.util.Optional;
 
 import org.jboss.logging.Logger;
 import org.junit.jupiter.api.AfterAll;
@@ -145,12 +146,16 @@ public class SpidKeycloakRealmTest {
         assertFalse(identityProviders.isEmpty(), "SPID realm identityProviders is empty.");
         List<String> aliases = identityProviders.stream().map(IdentityProviderRepresentation::getAlias).toList();
         logger.info("SPID realm Identity Providers: " + aliases.toString());
-        assertTrue(
-                aliases.contains("spid-spid-sp-test"),
-                () -> "SPID realm Identity Providers: " + aliases + "; spid-spid-sp-test not found."
-        );
-        IdentityProviderRepresentation ipr = identityProviders.stream().filter(ip -> ip.getAlias().equals("spid-spid-sp-test")).findFirst().get();
-        assertTrue(ipr.isTrustEmail(), "Attribute Trust Email has to be true.");
+        
+        this.checkIdentityProviders(identityProviders, "spid-spid-sp-test");
+        this.checkIdentityProviders(identityProviders, "spid-demo");
+    }
+
+    private void checkIdentityProviders(List<IdentityProviderRepresentation> identityProvider, String identityProviderAlias) {
+        Optional<IdentityProviderRepresentation> ipOpt = identityProvider.stream().filter(p -> p.getAlias().equals(identityProviderAlias)).findFirst();
+        assertFalse(ipOpt.isEmpty(), "No identity provider configured in SPID realm for alias " + identityProviderAlias);
+        IdentityProviderRepresentation ip = ipOpt.get();
+        assertTrue(ip.isTrustEmail(), "Attribute Trust Email has to be true.");
     }
 
     @Test
@@ -158,5 +163,13 @@ public class SpidKeycloakRealmTest {
         List<IdentityProviderMapperRepresentation> identityProviderMappers = spidRealm.getCreatedRepresentation().getIdentityProviderMappers();
         assertNotNull(identityProviderMappers, "SPID realm identityProviderMappers is null.");
         assertFalse(identityProviderMappers.isEmpty(), "SPID realm identityProviderMappers is empty.");
+        
+        this.checkIdentityProviderMappers(identityProviderMappers, "spid-spid-sp-test");
+        this.checkIdentityProviderMappers(identityProviderMappers, "spid-demo");
+    }
+    
+    private void checkIdentityProviderMappers(List<IdentityProviderMapperRepresentation> identityProviderMappers, String identityProviderAlias) {
+        List<IdentityProviderMapperRepresentation> ipm = identityProviderMappers.stream().filter(p -> p.getIdentityProviderAlias().equals("spid-spid-sp-test")).toList();
+        assertFalse(ipm.isEmpty(), "No identity provider mappers configured in SPID realm for alias " + identityProviderAlias);
     }
 }
