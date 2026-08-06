@@ -33,7 +33,6 @@ public class SpidRealmConfig implements RealmConfig {
                 )
                 .authenticationFlows(this.authenticationFlows())
                 .identityProviders(this.identityProviders())
-//                .identityProviders(this.spidSpTestIdentityProvider())
                 .identityProviderMappers(this.identityProviderMappers())
                 ;
     }
