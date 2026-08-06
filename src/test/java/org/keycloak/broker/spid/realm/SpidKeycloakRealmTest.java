@@ -7,6 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
 
 import org.jboss.logging.Logger;
@@ -47,6 +51,7 @@ public class SpidKeycloakRealmTest {
     ManagedRealm spidRealm;
 
     private static WireMockServer wireMock;
+    private static HttpClient httpClient;
 
     @BeforeAll
     static void setup() {
@@ -60,6 +65,8 @@ public class SpidKeycloakRealmTest {
                 .withStatus(200)
                 .withHeader("Content-Type", "application/xml")
                 .withBodyFile("spid-sp-test.xml")));
+        
+        httpClient = HttpClient.newHttpClient();
     }
 
     @AfterAll
@@ -81,6 +88,54 @@ public class SpidKeycloakRealmTest {
     @Test
     final void spidRealmNameIsSpid() {
         assertEquals("spid", spidRealm.getName());
+    }
+
+    @Test
+    final void spidSpTestMetadataIsReadable() throws Exception {
+        HttpResponse<String> response = httpClient.send(
+                HttpRequest.newBuilder()
+                        .uri(URI.create("http://localhost:8180/spid-sp-test.xml"))
+                        .GET()
+                        .build(),
+                HttpResponse.BodyHandlers.ofString()
+                );
+        assertNotNull(response.body());
+    }
+
+    @Test
+    final void spidRealmServiceProviderEntityIdIsReadable() throws Exception {
+        HttpResponse<String> response = httpClient.send(
+                HttpRequest.newBuilder()
+                        .uri(URI.create("http://localhost:8080/realms/spid"))
+                        .GET()
+                        .build(),
+                HttpResponse.BodyHandlers.ofString()
+                );
+        assertNotNull(response.body());
+    }
+
+    @Test
+    final void spidRealmSamlDescriptorIsReadable() throws Exception {
+        HttpResponse<String> response = httpClient.send(
+                HttpRequest.newBuilder()
+                        .uri(URI.create("http://localhost:8080/realms/spid/protocol/saml/descriptor"))
+                        .GET()
+                        .build(),
+                HttpResponse.BodyHandlers.ofString()
+                );
+        assertNotNull(response.body());
+    }
+
+    @Test
+    final void spidRealmOpenIdConfigurationIsReadable() throws Exception {
+        HttpResponse<String> response = httpClient.send(
+                HttpRequest.newBuilder()
+                        .uri(URI.create("http://localhost:8080/realms/spid/.well-known/openid-configuration"))
+                        .GET()
+                        .build(),
+                HttpResponse.BodyHandlers.ofString()
+                );
+        assertNotNull(response.body());
     }
 
     @Test
