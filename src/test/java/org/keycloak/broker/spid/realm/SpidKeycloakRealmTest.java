@@ -12,10 +12,11 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
-import java.util.Optional;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jboss.logging.Logger;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.keycloak.broker.spid.configuration.SpidRealmConfig;
@@ -42,6 +43,8 @@ import com.github.tomakehurst.wiremock.client.WireMock;
  */
 @KeycloakIntegrationTest(config = SpidSamlKeycloakServerConfig.class)
 public class SpidKeycloakRealmTest {
+
+    private static final List<String> IDENTITY_PROVIDER_ALIASES = List.of("spid-spid-sp-test", "spid-demo");
 
     private static final Logger logger = Logger.getLogger(SpidKeycloakRealmTest.class);
 
@@ -92,70 +95,40 @@ public class SpidKeycloakRealmTest {
     }
 
     @Test
-    final void spidSpTestMetadataIsReadable() throws Exception {
-        HttpResponse<String> response = httpClient.send(
-                HttpRequest.newBuilder()
-                        .uri(URI.create("http://localhost:8180/spid-sp-test.xml"))
-                        .GET()
-                        .build(),
-                HttpResponse.BodyHandlers.ofString()
-                );
-        assertNotNull(response.body());
-    }
-
-    @Test
     final void spidRealmServiceProviderEntityIdIsReadable() throws Exception {
-        HttpResponse<String> response = httpClient.send(
-                HttpRequest.newBuilder()
-                        .uri(URI.create("http://localhost:8080/realms/spid"))
-                        .GET()
-                        .build(),
-                HttpResponse.BodyHandlers.ofString()
-                );
-        assertNotNull(response.body());
+        this.checkIfUrlIsReadable("http://localhost:8080/realms/spid");
     }
 
     @Test
     final void spidRealmSamlDescriptorIsReadable() throws Exception {
-        HttpResponse<String> response = httpClient.send(
-                HttpRequest.newBuilder()
-                        .uri(URI.create("http://localhost:8080/realms/spid/protocol/saml/descriptor"))
-                        .GET()
-                        .build(),
-                HttpResponse.BodyHandlers.ofString()
-                );
-        assertNotNull(response.body());
+        this.checkIfUrlIsReadable("http://localhost:8080/realms/spid/protocol/saml/descriptor");
     }
 
     @Test
     final void spidRealmOpenIdConfigurationIsReadable() throws Exception {
-        HttpResponse<String> response = httpClient.send(
-                HttpRequest.newBuilder()
-                        .uri(URI.create("http://localhost:8080/realms/spid/.well-known/openid-configuration"))
-                        .GET()
-                        .build(),
-                HttpResponse.BodyHandlers.ofString()
-                );
-        assertNotNull(response.body());
+        this.checkIfUrlIsReadable("http://localhost:8080/realms/spid/.well-known/openid-configuration");
     }
 
     @Test
-    final void spidIdentityProviderIsConfigured() {
+    final void spidIdentityProviderIsConfigured() throws Exception {
         List<IdentityProviderRepresentation> identityProviders = spidRealm.getCreatedRepresentation().getIdentityProviders();
         assertNotNull(identityProviders, "SPID realm identityProviders is null.");
         assertFalse(identityProviders.isEmpty(), "SPID realm identityProviders is empty.");
         List<String> aliases = identityProviders.stream().map(IdentityProviderRepresentation::getAlias).toList();
         logger.info("SPID realm Identity Providers: " + aliases.toString());
-        
-        this.checkIdentityProviders(identityProviders, "spid-spid-sp-test");
-        this.checkIdentityProviders(identityProviders, "spid-demo");
+
+        for(String i : IDENTITY_PROVIDER_ALIASES) {
+            this.checkIdentityProviders(identityProviders, i);
+        }
     }
 
-    private void checkIdentityProviders(List<IdentityProviderRepresentation> identityProvider, String identityProviderAlias) {
-        Optional<IdentityProviderRepresentation> ipOpt = identityProvider.stream().filter(p -> p.getAlias().equals(identityProviderAlias)).findFirst();
-        assertFalse(ipOpt.isEmpty(), "No identity provider configured in SPID realm for alias " + identityProviderAlias);
-        IdentityProviderRepresentation ip = ipOpt.get();
+    private void checkIdentityProviders(List<IdentityProviderRepresentation> identityProvider, String identityProviderAlias) throws Exception {
+        IdentityProviderRepresentation ip = identityProvider.stream()
+                .filter(p -> p.getAlias().equals(identityProviderAlias))
+                .findFirst().orElseGet(() -> Assertions.fail("No identity provider configured in SPID realm for alias " + identityProviderAlias));
         assertTrue(ip.isTrustEmail(), "Attribute Trust Email has to be true.");
+        
+        this.checkIfUrlIsReadable(ip.getConfig().get("metadataDescriptorUrl"));
     }
 
     @Test
@@ -163,13 +136,28 @@ public class SpidKeycloakRealmTest {
         List<IdentityProviderMapperRepresentation> identityProviderMappers = spidRealm.getCreatedRepresentation().getIdentityProviderMappers();
         assertNotNull(identityProviderMappers, "SPID realm identityProviderMappers is null.");
         assertFalse(identityProviderMappers.isEmpty(), "SPID realm identityProviderMappers is empty.");
-        
-        this.checkIdentityProviderMappers(identityProviderMappers, "spid-spid-sp-test");
-        this.checkIdentityProviderMappers(identityProviderMappers, "spid-demo");
+
+        for(String i : IDENTITY_PROVIDER_ALIASES) {
+            this.checkIdentityProviderMappers(identityProviderMappers, i);
+        }
     }
     
     private void checkIdentityProviderMappers(List<IdentityProviderMapperRepresentation> identityProviderMappers, String identityProviderAlias) {
-        List<IdentityProviderMapperRepresentation> ipm = identityProviderMappers.stream().filter(p -> p.getIdentityProviderAlias().equals("spid-spid-sp-test")).toList();
+        List<IdentityProviderMapperRepresentation> ipm = identityProviderMappers.stream()
+                .filter(p -> p.getIdentityProviderAlias().equals(identityProviderAlias)).toList();
         assertFalse(ipm.isEmpty(), "No identity provider mappers configured in SPID realm for alias " + identityProviderAlias);
+    }
+
+    private String checkIfUrlIsReadable(String requestUrl) throws Exception {
+        HttpResponse<String> response = httpClient.send(
+                HttpRequest.newBuilder()
+                        .uri(URI.create(requestUrl))
+                        .GET()
+                        .build(),
+                HttpResponse.BodyHandlers.ofString()
+                );
+        assertTrue(response.statusCode() < 400, "Response status calling " + requestUrl + " is not ok: " + response.statusCode());
+        assertTrue(StringUtils.isNotEmpty(response.body()), "Response body is null or empty");
+        return response.body();
     }
 }
