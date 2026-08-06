@@ -42,7 +42,7 @@
       "signatureAlgorithm": "RSA_SHA256",
       "useJwksUrl": "true",
       "wantAssertionsSigned": "true",
-      "metadataDescriptorUrl": "http://localhost:80/spid-sp-test.xml",
+      "metadataDescriptorUrl": "http://localhost:8180/spid-sp-test.xml",
       "otherContactIpaCode": "xxxxxx",
       "postBindingAuthnRequest": "true",
       "forceAuthn": "true",

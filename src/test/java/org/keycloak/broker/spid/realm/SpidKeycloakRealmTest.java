@@ -50,7 +50,7 @@ public class SpidKeycloakRealmTest {
 
     @BeforeAll
     static void setup() {
-        wireMock = new WireMockServer(options().port(80).usingFilesUnderClasspath("wiremock"));
+        wireMock = new WireMockServer(options().port(8180).usingFilesUnderClasspath("wiremock"));
         wireMock.start();
 
         WireMock.configureFor("localhost", wireMock.port());
